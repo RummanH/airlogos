@@ -1,11 +1,16 @@
-# airlogos
+# ✈️ airlogos
 
-A lightweight and easy-to-use NPM package to get airline logos (SVG and PNG) in JavaScript or TypeScript projects.  
-Compatible with **React**, **Angular**, **Vue**, or any modern frontend framework.
+A lightweight and framework-agnostic NPM package for easily accessing **airline logos** (SVG and PNG) by their **IATA code**.
+
+Works with **React**, **Angular**, **Vue**, **Next.js**, **Nuxt**, or any modern JavaScript/TypeScript framework.
 
 ---
 
-## Installation
+> 🛡️ **Please understand that images are base64 format so you may need safe parse** in frameworks like Angular, Vue, or others with CSP or SSR restrictions.
+
+---
+
+## 📦 Installation
 
 ```bash
 npm install airlogos
@@ -15,29 +20,25 @@ yarn add airlogos
 
 ---
 
-## Quick Usage
+## 🚀 Quick Usage
 
 ```ts
 import airlineLogos from "airlogos";
 
-const { EK, BA, QR } = airlineLogos;
+const { EK, QR, BA } = airlineLogos;
 
 console.log(EK.svg);
-console.log(EK.png);
+console.log(QR.png);
 ```
 
-Each airline is accessible via its IATA code (e.g., `EK`, `BA`, `QR`), with two formats:
+Each airline is available via its **IATA code** (`EK`, `QR`, `BA`, etc.), and includes:
 
-- `.svg` → Returns the path/URL to the SVG logo  
-- `.png` → Returns the path/URL to the PNG logo
-
----
-
-## Usage in Popular Frameworks
+- `svg`: base64 image string (or `""` if not available)
+- `png`: base64 image string (or `""` if not available)
 
 ---
 
-### React Example
+## ⚛️ React Example
 
 ```tsx
 import React from "react";
@@ -49,38 +50,69 @@ const AirlineLogo = () => (
   <div>
     <h2>Emirates Logo</h2>
     <img src={EK.svg} alt="Emirates Logo" width={100} />
-    
+
     <h2>Qatar Airways Logo</h2>
-    <img src={QR.png} alt="Qatar Airways Logo" width={100} />
+    <img src={QR.png} alt="Qatar Logo" width={100} />
   </div>
 );
 
 export default AirlineLogo;
 ```
 
+✅ React supports base64 images directly via `<img src={base64} />`.
+
 ---
 
-### Angular Example
+## 🌐 Next.js Example
 
-#### airline.component.ts
+```tsx
+import airlineLogos from "airlogos";
 
-```ts
-import { Component } from '@angular/core';
-import airlineLogos from 'airlogos';
+export default function Home() {
+  const { BA } = airlineLogos;
 
-@Component({
-  selector: 'app-airline',
-  templateUrl: './airline.component.html'
-})
-export class AirlineComponent {
-  EKLogoSvg = airlineLogos.EK.svg;
-  BALogoPng = airlineLogos.BA.png;
+  return (
+    <div>
+      <h2>British Airways</h2>
+      <img src={BA.svg} alt="British Airways Logo" width={120} />
+    </div>
+  );
 }
 ```
 
-#### airline.component.html
+✅ Base64 support is built-in. For performance optimization, consider static imports or CDN fallback.
+
+---
+
+## 🅰️ Angular Example
+
+```ts
+// airline.component.ts
+import { Component } from "@angular/core";
+import airlineLogos from "airlogos";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+
+@Component({
+  selector: "app-airline",
+  templateUrl: "./airline.component.html",
+})
+export class AirlineComponent {
+  EKLogoSvg: SafeUrl;
+  BALogoPng: SafeUrl;
+
+  constructor(private sanitizer: DomSanitizer) {
+    this.EKLogoSvg = this.getSafeUrl(airlineLogos.EK.svg);
+    this.BALogoPng = this.getSafeUrl(airlineLogos.BA.png);
+  }
+
+  getSafeUrl(base64: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(base64);
+  }
+}
+```
 
 ```html
+<!-- airline.component.html -->
 <h2>Emirates Logo</h2>
 <img [src]="EKLogoSvg" alt="Emirates Logo" width="100" />
 
@@ -88,47 +120,61 @@ export class AirlineComponent {
 <img [src]="BALogoPng" alt="British Airways Logo" width="100" />
 ```
 
+⚠️ Angular requires `DomSanitizer` for base64 image strings.
+
 ---
 
-### Vue Example (Vue 3)
+## 🧩 Vue 3 Example
 
-```html
+```vue
 <template>
   <div>
-    <h2>Qatar Airways Logo</h2>
-    <img :src="QRLogo" alt="Qatar Logo" width="100" />
+    <h2>Qatar Airways</h2>
+    <img :src="QR.png" alt="Qatar Logo" width="100" />
   </div>
 </template>
 
 <script setup>
-import airlineLogos from 'airlogos';
-
-const QRLogo = airlineLogos.QR.svg;
+import airlineLogos from "airlogos";
+const { QR } = airlineLogos;
 </script>
 ```
 
 ---
 
-## Dynamic Access (Optional)
+## 🌙 Nuxt 3 Example
 
-You can dynamically access logos using airline codes:
+```vue
+<template>
+  <div>
+    <img :src="EK.svg" alt="Emirates Logo" width="120" />
+  </div>
+</template>
 
-```ts
-const code = "EK";
-const logo = airlineLogos[code].svg;
+<script setup>
+import airlineLogos from "airlogos";
+const { EK } = airlineLogos;
+</script>
 ```
 
----
-
-## Contact
-
-If you don't find your desired logo, please contact us:  
-**rummanstack@gmail.com**
-
-Maintained by Mohammad Rummman
+For Nuxt, no sanitizer is required for base64 in most cases. For stricter CSP setups, sanitize using Nuxt runtime modules.
 
 ---
 
-## 📄 License
+## ❓ What if a logo is missing?
+
+If a logo isn’t available in one format (`svg` or `png`), its value will simply be an empty string (`""`).
+
+---
+
+## 📩 Contact
+
+If you don’t find your desired airline logo, please reach out:
+
+📧 **rummanstack@gmail.com**
+
+---
+
+## 🪪 License
 
 MIT
