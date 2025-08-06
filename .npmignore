@@ -1,0 +1,11 @@
+# Don't publish dev tools and configs
+src/
+scripts/
+tsconfig.json
+*.ts
+*.log
+
+node_modules/
+
+.git
+.gitignore
