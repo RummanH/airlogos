@@ -1,6 +1,6 @@
 {
   "name": "airlogos",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Airline logos (SVG and PNG)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -35,7 +35,6 @@
     "airline icon"
   ],
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
