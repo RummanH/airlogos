@@ -2,7 +2,6 @@
 src/
 scripts/
 tsconfig.json
-*.ts
 *.log
 
 node_modules/
